@@ -22,7 +22,7 @@ PORT_NUMBER = 8000
 
 class Handler(BaseHTTPRequestHandler):
 
-    def do_hEAD(self):
+    def do_HEAD(self):
         print('in do_HEAD')
         self.send_response(200)
         self.send_header("Content-type", "text/html")
@@ -50,9 +50,9 @@ class Handler(BaseHTTPRequestHandler):
                 'HEADERS RECEIVED:',
                 ]
         '''
-        self.send_response(200)
-        self.end_headers()
         if parsed_path.path == '/' or parsed_path.path == '' or parsed_path.path == '/index.html':
+           self.send_response(200)
+           self.end_headers()
            print('query = ' + str(parsed_path.query)) 
            fin = open('index.html')
            content = fin.read()
@@ -60,6 +60,8 @@ class Handler(BaseHTTPRequestHandler):
            self.wfile.write(content.encode())
            return
         if parsed_path.path == '/temp.html':
+           self.send_response(200)
+           self.end_headers()
            query = parsed_path.query
            print('query = ' + query)
            fin = open('temp.html')
@@ -68,12 +70,16 @@ class Handler(BaseHTTPRequestHandler):
            self.wfile.write(content.encode())
            return
         if parsed_path.path == '/ipsum.html':
+           self.send_response(200)
+           self.end_headers()
            print('query = ' + str(parsed_path.query))
            fin = open('ipsum.html')
            content = fin.read()
            fin.close()
            self.wfile.write(content.encode())
            return
+        self.send_response(404)
+        self.end_headers()
         content = 'Oops...page not found'
         self.wfile.write(content.encode())
         return
